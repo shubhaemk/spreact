@@ -1,0 +1,16 @@
+{
+  "name": "spreact",
+  "version": "1.0.0",
+  "main": "index.html",
+  "author": "Shubham Kamath",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel ./src --presets=@babel/preset-react -d ./bundle"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "@babel/cli": "^7.10.1"
+  }
+}
