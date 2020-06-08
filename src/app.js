@@ -1,5 +1,5 @@
-/** @jsx Spreact.createElement */
-import Spreact from "../spreact/spreact-dom.js";
+/** @jsx Spreact.createElementFromJSX */
+import Spreact from "../spreact/spreact.js";
 
 const backgroundColorList = [
     "Blue",

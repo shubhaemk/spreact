@@ -5,7 +5,7 @@
   "author": "Shubham Kamath",
   "license": "MIT",
   "scripts": {
-    "build": "babel ./src --presets=@babel/preset-react -d ./bundle"
+    "build": "babel ./src --presets=@babel/preset-react -w -d ./bundle"
   },
   "dependencies": {},
   "devDependencies": {

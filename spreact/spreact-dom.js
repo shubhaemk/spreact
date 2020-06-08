@@ -1,17 +1,3 @@
-const createElement = (type, config, ...args) => {
-  const props = Object.assign({}, config);
-  const hasChildren = args.length > 0;
-  const rawChildren = hasChildren ? [].concat(...args) : [];
-  props.children = rawChildren
-    .filter((c) => c != null && c !== false)
-    .map((c) => (c instanceof Object ? c : createTextElement(c)));
-  return { type, props };
-}
-
-const createTextElement = value =>  {
-  return createElement(`TEXT ELEMENT`, { nodeValue: value });
-}
-
 const createSpreactElement = element => {
     const { type, props } = element;
 
@@ -44,6 +30,5 @@ const render = (element, parentDom) => {
 };
 
 export default {
-    render,
-    createElement
+    render
 };
