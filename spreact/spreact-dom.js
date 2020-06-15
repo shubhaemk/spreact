@@ -1,3 +1,23 @@
+const instantiate = element => {
+    const { type, props } = element;
+
+    // Create DOM element
+    const isTextElement = type === "TEXT ELEMENT";
+    const dom = isTextElement
+        ? document.createTextNode("")
+        : document.createElement(type);
+
+    updateDomProperties(dom, [], props);
+
+    // Instantiate and append children
+    const childElements = props.children || [];
+    const childInstances = childElements.map(instantiate);
+    const childDoms = childInstances.map(childInstance => childInstance.dom);
+    childDoms.forEach(childDom => dom.appendChild(childDom));
+
+    const instance = { dom, element, childInstances };
+    return instance;
+}
 const createSpreactElement = element => {
     const { type, props } = element;
 
@@ -26,7 +46,12 @@ const createSpreactElement = element => {
 const render = (element, parentDom) => {
     const [spreactElement, spreactChildren] = createSpreactElement(element);
     spreactChildren.length && spreactChildren.forEach(spreactChildElement => render(spreactChildElement, spreactElement));
-    parentDom.appendChild(spreactElement);
+    
+    if(!parentDom.lastChild){
+        parentDom.appendChild(spreactElement);
+    }else{
+        parentDom.replaceChild(spreactElement,parentDom.lastChild);
+    }
 };
 
 export default {
