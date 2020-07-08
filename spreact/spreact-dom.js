@@ -1,3 +1,5 @@
+let rootInstance = null;
+
 const instantiate = element => {
     const { type, props } = element;
 
@@ -7,7 +9,18 @@ const instantiate = element => {
         ? document.createTextNode("")
         : document.createElement(type);
 
-    updateDomProperties(dom, [], props);
+    // Add event listeners
+    const isEventListener = name => name.startsWith("on");
+    Object.keys(props).filter(isEventListener).forEach(name => {
+        const eventType = name.toLowerCase().substring(2);
+        dom.addEventListener(eventType, props[name]);
+    });
+
+    // Set properties
+    const isAttribute = name => !isEventListener(name) && name != "children";
+    Object.keys(props).filter(isAttribute).forEach(name => {
+        dom[name] = props[name];
+    });
 
     // Instantiate and append children
     const childElements = props.children || [];
@@ -18,40 +31,24 @@ const instantiate = element => {
     const instance = { dom, element, childInstances };
     return instance;
 }
-const createSpreactElement = element => {
-    const { type, props } = element;
 
-    // create element
-    const isTextElement = type === `TEXT ELEMENT`;
-    const spreactElement = isTextElement ? document.createTextNode(type) : document.createElement(type);
-
-    // add event listener
-    const isEventListener = eventName => eventName.startsWith(`on`);
-    Object.keys(props).filter(isEventListener).forEach(eventName => {
-        const eventType = eventName.toLowerCase().substring(2);
-        spreactElement.addEventListener(eventType, props[eventName]);
-    });
-
-    // add props
-    const isAttribute = attributeName => !isEventListener(attributeName) && attributeName != `children`;
-    Object.keys(props).filter(isAttribute).forEach(attributeName => {
-        spreactElement[attributeName] = props[attributeName];
-    });
-
-    const spreactChildren = props.children || [];
-
-    return [spreactElement, spreactChildren];
-};
-
-const render = (element, parentDom) => {
-    const [spreactElement, spreactChildren] = createSpreactElement(element);
-    spreactChildren.length && spreactChildren.forEach(spreactChildElement => render(spreactChildElement, spreactElement));
-    
-    if(!parentDom.lastChild){
-        parentDom.appendChild(spreactElement);
-    }else{
-        parentDom.replaceChild(spreactElement,parentDom.lastChild);
+const reconcile = (parentDom, instance, element) => {
+    if (instance == null) {
+        const newInstance = instantiate(element);
+        parentDom.appendChild(newInstance.dom);
+        return newInstance;
+    } else {
+        const newInstance = instantiate(element);
+        parentDom.replaceChild(newInstance.dom, instance.dom);
+        return newInstance;
     }
+}
+
+
+const render = (element, container) => {
+    const prevInstance = rootInstance;
+    const nextInstance = reconcile(container, prevInstance, element);
+    rootInstance = nextInstance;
 };
 
 export default {
