@@ -1,7 +1,4 @@
-/** @jsx Spreact.createElementFromJSX */
+/** @jsx Spreact.createElement */
 import Spreact from "../spreact/spreact.js";
-const backgroundColorList = ["Blue", "Green", "Red"];
-const App = Spreact.createElementFromJSX("div", null, backgroundColorList.map(color => {
-  return Spreact.createElementFromJSX("div", null, color);
-}));
+const App = Spreact.createElement("div", null, Spreact.createElement("h2", null, "Hello"));
 export default App;

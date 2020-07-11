@@ -1,4 +1,4 @@
-import SpreactDOM from "../spreact/spreact-dom.js"; //import App from './app.js';
-
+/** @jsx Spreact.createElement */
+import Spreact, { render } from "../spreact/spreact.js";
 import App from './app.js';
-SpreactDOM.render(App, document.getElementById("root"));
+render(Spreact.createElement(App, null), document.getElementById("root"));
